@@ -1,0 +1,925 @@
+import React, { useState, useEffect } from 'react';
+
+// Main App Component
+const App = () => {
+    const [currentView, setCurrentView] = useState('home'); // 'home', 'vocabulary', 'grammar', 'flashcards', 'quiz'
+    const [flashcardData, setFlashcardData] = useState([]);
+    const [quizData, setQuizData] = useState([]);
+
+    // Consolidated Data from your notes
+    const studyData = {
+        vocabulary: {
+            deWords: [
+                { word: 'de gym', translation: 'the gym' },
+                { word: 'de zomer', translation: 'the summer' },
+                { word: 'de reden', translation: 'the reason' },
+                { word: 'de stok achter de deur', translation: 'the motivation/pressure to finish something' },
+                { word: 'de beurt', translation: 'the turn' },
+                { word: 'de verjaardagstaart', translation: 'the birthday cake' },
+                { word: 'de lievelingstaart', translation: 'the favorite cake' },
+                { word: 'de fotograaf', translation: 'the photographer' },
+                { word: 'de situatie', translation: 'the situation' },
+                { word: 'de dreiging', translation: 'the threat' },
+                { word: 'de inbraak', translation: 'the burglary' },
+                { word: 'de staart', translation: 'the tail (of the whale)' },
+                { word: 'de vinnen', translation: 'the fins (of the whale)' },
+                { word: 'de apotheker', translation: 'the pharmacist' },
+                { word: 'de slagerij', translation: 'the butcher’s shop' },
+                { word: 'de wasmachine', translation: 'the washing machine' },
+                { word: 'de waarheid', translation: 'the truth' },
+                { word: 'de vooruitgang', translation: 'the progress' },
+                { word: 'de wet', translation: 'the law' },
+                { word: 'de peetmoeder', translation: 'the godmother' },
+                { word: 'de basisschool', translation: 'the primary school' },
+                { word: 'de toets', translation: 'the test' },
+                { word: 'de halte', translation: 'the stop (bus/tram)' },
+                { word: 'de mevrouw', translation: 'the madam' },
+                { word: 'de trein', translation: 'the train' },
+                { word: 'de taakverdeling', translation: 'the division of tasks' },
+                { word: 'de ongesteldheid', translation: 'the menstruation' },
+                { word: 'de middelbare school', translation: 'the secondary school' },
+                { word: 'de opleiding', translation: 'the education/training' },
+                { word: 'de universiteit', translation: 'the university' },
+                { word: 'de trouwerij', translation: 'the wedding' },
+                { word: 'de hardloopwedstrijd', translation: 'the running race' },
+                { word: 'de waterpistolen', translation: 'the water pistols' },
+                { word: 'de rolschaatsen', translation: 'the roller skates' },
+                { word: 'de koorts', translation: 'the fever' },
+                { word: 'de diarree', translation: 'the diarrhea' },
+                { word: 'de dienstregeling', translation: 'the timetable' },
+                { word: 'de huisbaas', translation: 'the landlord' },
+                { word: 'de gewoonte', translation: 'the habit' },
+                { word: 'de kennis', translation: 'the knowledge' },
+                { word: 'de vriendschap', translation: 'the friendship' },
+                { word: 'de conditie', translation: 'the condition' },
+                { word: 'de filosofie', translation: 'the philosophy' },
+                { word: 'de organisatie', translation: 'the organization' },
+                { word: 'de politie', translation: 'the police' },
+                { word: 'de lamellen', translation: 'the blinds' },
+                { word: 'de gordijn', translation: 'the curtain' },
+                { word: 'de kaars', translation: 'the candle' },
+                { word: 'de oplader', translation: 'the charger' },
+                { word: 'de bikini', translation: 'the bikini' },
+                { word: 'de windkracht', translation: 'the wind force' },
+                { word: 'de bliksem', translation: 'the lightning' },
+                { word: 'de wolken', translation: 'the clouds' },
+                { word: 'de injectie', translation: 'the injection' },
+                { word: 'de operatie', translation: 'the operation' },
+                { word: 'de oplossing', translation: 'the solution' },
+                { word: 'de textuur', translation: 'the texture' },
+                { word: 'de kritiek', translation: 'the criticism' },
+                { word: 'de rij', translation: 'the queue' },
+                { word: 'de meneer', translation: 'the mister' },
+                { word: 'de steegjes', translation: 'the alleys' },
+                { word: 'de motor', translation: 'the motorcycle' },
+                { word: 'de man', translation: 'the man' },
+                { word: 'de winkels', translation: 'the shops' },
+                { word: 'de spieren', translation: 'the muscles' },
+                { word: 'de ruggengraat', translation: 'the spine' },
+                { word: 'de walvis', translation: 'the whale' },
+            ],
+            hetWords: [
+                { word: 'het huis', translation: 'the house' },
+                { word: 'het appartement', translation: 'the apartment' },
+                { word: 'het probleem', translation: 'the problem' },
+                { word: 'het huiswerk', translation: 'the homework' },
+                { word: 'het examen', translation: 'the exam' },
+                { word: 'het horloge', translation: 'the watch' },
+                { word: 'het station', translation: 'the station' },
+                { word: 'het kunstwerk', translation: 'the artwork' },
+                { word: 'het schilderij', translation: 'the painting' },
+                { word: 'het tekening', translation: 'the drawing' },
+                { word: 'het gemeentehuis', translation: 'the town hall' },
+                { word: 'het waterijs', translation: 'the popsicle' },
+                { word: 'het thuis', translation: 'the home' },
+                { word: 'het onweer', translation: 'the thunderstorm' },
+                { word: 'het spoor', translation: 'the track/rail' },
+                { word: 'het paspoort', translation: 'the passport' },
+                { word: 'het gebouw', translation: 'the building' },
+                { word: 'het geluid', translation: 'the sound' },
+                { word: 'het toerisme', translation: 'the tourism' },
+                { word: 'het arrangement', translation: 'the arrangement' },
+                { word: 'het stelsel', translation: 'the system' },
+                { word: 'het museum', translation: 'the museum' },
+                { word: 'het strand', translation: 'the beach' },
+                { word: 'het identiteitsbewijs', translation: 'the ID' },
+                { word: 'het huurhuis', translation: 'the rental house' },
+                { word: 'het klushuis', translation: 'the fixer-upper house' },
+                { word: 'het zandstrand', translation: 'the sandy beach' },
+                { word: 'het stenen strand', translation: 'the stony beach' },
+                { word: 'het water', translation: 'the water' },
+                { word: 'het herstel', translation: 'the recovery' },
+                { word: 'het klimaat', translation: 'the climate' },
+                { word: 'het haar', translation: 'the hair' },
+            ],
+            adjectivesAdverbs: [
+                { word: 'zelfverzekerd', translation: 'confident' },
+                { word: 'bijzonder', translation: 'special, particular' },
+                { word: 'ontroerend', translation: 'touching, moving (emotionally)' },
+                { word: 'verdrietig', translation: 'sad' },
+                { word: 'blij', translation: 'happy' },
+                { word: 'bezorgd', translation: 'worried' },
+                { word: 'middelmatig', translation: 'mediocre' },
+                { word: 'vreedzaam', translation: 'peaceful (without violence)' },
+                { word: 'indrukwekkend', translation: 'impressive' },
+                { word: 'zelden', translation: 'rarely' },
+                { word: 'meerdere keren / herhaaldelijk', translation: 'multiple times' },
+                { word: 'misselijk', translation: 'nauseous (as if you have to vomit)' },
+                { word: 'verlegen', translation: 'shy' },
+                { word: 'besmettelijk', translation: 'contagious' },
+                { word: 'verloren', translation: 'lost' },
+                { word: 'kwijt', translation: 'lost (adj) / kwijt zijn (to have lost something)' },
+                { word: 'ontspannend', translation: 'relaxing' },
+                { word: 'zonnig', translation: 'sunny' },
+                { word: 'bewolkt', translation: 'cloudy' },
+                { word: 'nat', translation: 'wet (snow)' },
+                { word: 'afwisselend', translation: 'alternating (weather)' },
+                { word: 'tropisch', translation: 'tropical' },
+                { word: 'benauwd', translation: 'stuffy / breathless' },
+                { word: 'nauwe', translation: 'narrow (alleys)' },
+                { word: 'snel', translation: 'fast (go ahead)' },
+                { word: 'netjes', translation: 'neatly (in line)' },
+                { word: 'glad', translation: 'slippery' },
+                { word: 'erg', translation: 'very' },
+                { word: 'erger', translation: 'worse' },
+                { word: 'teleurgesteld', translation: 'disappointed' },
+            ],
+            verbs: [
+                { infinitive: 'bolderen', tt: 'Ik bolder', vt_vd: 'Ik bolderde / Ik heb gebolderd', translation: 'to rumble / to boom' },
+                { infinitive: 'doorgaan', tt: 'Ik ga door', vt_vd: 'Ik ging door / Ik ben doorgegaan', translation: 'to continue' },
+                { infinitive: 'helpen', tt: 'Ik help', vt_vd: 'Ik hielp / Ik heb geholpen', translation: 'to help' },
+                { infinitive: 'vieren', tt: 'Ik vier', vt_vd: 'Ik vierde / Ik heb gevierd', translation: 'to celebrate' },
+                { infinitive: 'bakken', tt: 'Ik bak', vt_vd: 'Ik bakte / Ik heb gebakken', translation: 'to bake' },
+                { infinitive: 'maken', tt: 'Ik maak', vt_vd: 'Ik maakte / Ik heb gemaakt', translation: 'to make' },
+                { infinitive: 'zakken', tt: 'Ik zak', vt_vd: 'Ik zakte / Ik ben gezakt', translation: 'to fail (exam)' },
+                { infinitive: 'slagen', tt: 'Ik slaag', vt_vd: 'Ik slaagde / Ik ben geslaagd', translation: 'to succeed (exam)' },
+                { infinitive: 'vasthouden', tt: 'Ik houd vast', vt_vd: 'Ik hield vast / Ik heb vastgehouden', translation: 'to hold' },
+                { infinitive: 'raken (emotioneel)', tt: 'De foto raakt me', vt_vd: 'De foto raakte me / De foto heeft me geraakt', translation: 'to affect emotionally' },
+                { infinitive: 'aanraken (fysiek)', tt: 'Ik raak aan', vt_vd: 'Ik raakte aan / Ik heb aangeraakt', translation: 'to touch (physically)' },
+                { infinitive: 'regelen', tt: 'Ik regel', vt_vd: 'Ik regelde / Ik heb geregeld', translation: 'to arrange, fix' },
+                { infinitive: 'bezoeken', tt: 'Ik bezoek', vt_vd: 'Ik bezocht / Ik heb bezocht', translation: 'to visit' },
+                { infinitive: 'bekijken', tt: 'Ik bekijk', vt_vd: 'Ik bekeek / Ik heb bekeken', translation: 'to look at, view' },
+                { infinitive: 'moeten', tt: 'Ik moet', vt_vd: 'Ik moest', translation: 'must, had to' },
+                { infinitive: 'vergeten', tt: 'Ik vergeet', vt_vd: 'Ik vergat / Ik ben vergeten', translation: 'to forget' },
+                { infinitive: 'klussen', tt: 'Ik klus', vt_vd: 'Ik kluste / Ik heb geklust', translation: 'to do repairs/DIY' },
+                { infinitive: 'doen (klusjes)', tt: 'Ik doe klusjes', vt_vd: 'Ik deed klusjes / Ik heb klusjes gedaan', translation: 'to do chores' },
+                { infinitive: 'ophangen', tt: 'Ik hang op', vt_vd: 'Ik hing op / Ik heb opgehangen', translation: 'to hang up' },
+                { infinitive: 'opzoeken', tt: 'Ik zoek op', vt_vd: 'Ik zocht op / Ik heb opgezocht', translation: 'to look up (information)' },
+                { infinitive: 'staren', tt: 'Ik staar', vt_vd: 'Ik staarde / Ik heb gestaard', translation: 'to stare' },
+                { infinitive: 'in elkaar zetten', tt: 'Ik zet in elkaar', vt_vd: 'Ik zette in elkaar / Ik heb in elkaar gezet', translation: 'to assemble' },
+                { infinitive: 'vastmaken', tt: 'Ik maak vast', vt_vd: 'Ik maakte vast / Ik heb vastgemaakt', translation: 'to fasten' },
+                { infinitive: 'verwijzen', tt: 'Ik verwijs', vt_vd: 'Ik verwees / Ik heb verwezen', translation: 'to refer' },
+                { infinitive: 'schelen', tt: 'Het scheelt', vt_vd: 'Het scheelde / Het heeft gescheeld', translation: 'to save (time), make a difference' },
+                { infinitive: 'vallen', tt: 'Ik val', vt_vd: 'Ik viel / Ik ben gevallen', translation: 'to fall' },
+                { infinitive: 'wassen', tt: 'Ik was', vt_vd: 'Ik waste / Ik heb gewassen', translation: 'to wash' },
+                { infinitive: 'vervelen (zich)', tt: 'Ik verveel me', vt_vd: 'Ik verveelde me / Ik heb me verveeld', translation: 'to be bored' },
+                { infinitive: 'bezeren (zich)', tt: 'Ik bezeer me', vt_vd: 'Ik bezeerde me / Ik heb me bezeerd', translation: 'to hurt oneself' },
+                { infinitive: 'schamen (zich)', tt: 'Ik schaam me', vt_vd: 'Ik schaamde me / Ik heb me geschaamd', translation: 'to be ashamed' },
+                { infinitive: 'voelen', tt: 'Ik voel me', vt_vd: 'Ik voelde me / Ik heb me gevoeld', translation: 'to feel' },
+                { infinitive: 'studeren', tt: 'Ik studeer', vt_vd: 'Ik studeerde / Ik heb gestudeerd', translation: 'to study' },
+                { infinitive: 'kijken', tt: 'Ik kijk', vt_vd: 'Ik keek / Ik heb gekeken', translation: 'to watch' },
+                { infinitive: 'halen', tt: 'Ik haal', vt_vd: 'Ik haalde / Ik heb gehaald', translation: 'to get' },
+                { infinitive: 'kuchen', tt: 'Ik kuch', vt_vd: 'Ik kuchte / Ik heb gekucht', translation: 'to cough' },
+                { infinitive: 'overgeven', tt: 'Ik geef over', vt_vd: 'Ik gaf over / Ik heb overgegeven', translation: 'to vomit' },
+                { infinitive: 'zweten', tt: 'Ik zweet', vt_vd: 'Ik zweette / Ik heb gezweet', translation: 'to sweat' },
+                { infinitive: 'doorzetten', tt: 'Ik zet door', vt_vd: 'Ik zette door / Ik heb doorgezet', translation: 'to persevere / to push through' },
+                { infinitive: 'kwijt raken', tt: 'Ik raak kwijt', vt_vd: 'Ik raakte kwijt / Ik ben kwijtgeraakt', translation: 'to lose (something)' },
+                { infinitive: 'vinden', tt: 'Ik vind', vt_vd: 'Ik vond / Ik heb gevonden', translation: 'to find' },
+                { infinitive: 'zonnebrand opdoen', tt: 'Ik doe zonnebrand op', vt_vd: 'Ik deed zonnebrand op / Ik heb zonnebrand opgedaan', translation: 'to apply sunscreen' },
+                { infinitive: 'amuseren (zich)', tt: 'Ik amuseer me', vt_vd: 'Ik amuseerde me / Ik heb me geamuseerd', translation: 'to amuse oneself' },
+                { infinitive: 'ontspannen', tt: 'Ik ontspan', vt_vd: 'Ik ontspande / Ik heb ontspannen', translation: 'to relax' },
+                { infinitive: 'vechten', tt: 'Ik vecht', vt_vd: 'Ik vocht / Ik heb gevochten', translation: 'to fight' },
+                { infinitive: 'wisselen', tt: 'Ik wissel', vt_vd: 'Ik wisselde / Ik heb gewisseld', translation: 'to exchange (money)' },
+                { infinitive: 'aangeven', tt: 'Ik geef aan', vt_vd: 'Ik gaf aan / Ik heb aangegeven', translation: 'to hand over / to indicate' },
+                { infinitive: 'verhuizen', tt: 'Ik verhuis', vt_vd: 'Ik verhuisde / Ik ben verhuisd', translation: 'to move house' },
+                { infinitive: 'kopen', tt: 'Ik koop', vt_vd: 'Ik kocht / Ik heb gekocht', translation: 'to buy' },
+                { infinitive: 'regenen', tt: 'Het regent', vt_vd: 'Het regende / Het heeft geregend', translation: 'to rain' },
+                { infinitive: 'miezeren', tt: 'Het miezert', vt_vd: 'Het miezerde / Het heeft gemiezerd', translation: 'to drizzle' },
+                { infinitive: 'schommelen', tt: 'Het schommelt', vt_vd: 'Het schommelde / Het heeft geschommeld', translation: 'to fluctuate / to swing' },
+                { infinitive: 'klimmen', tt: 'Ik klim', vt_vd: 'Ik klom / Ik ben geklommen', translation: 'to climb' },
+                { infinitive: 'proeven', tt: 'Ik proef', vt_vd: 'Ik proefde / Ik heb geproefd', translation: 'to taste' },
+                { infinitive: 'voorgaan', tt: 'Ik ga voor', vt_vd: 'Ik ging voor / Ik ben voorgegaan', translation: 'to go first / to go ahead (in line)' },
+                { infinitive: 'wachten', tt: 'Ik wacht', vt_vd: 'Ik wachtte / Ik heb gewacht', translation: 'to wait' },
+                { infinitive: 'gaan staan', tt: 'Ik ga staan', vt_vd: 'Ik ging staan / Ik ben gaan staan', translation: 'to stand up / to take a stand' },
+                { infinitive: 'aanmaken', tt: 'Ik maak aan', vt_vd: 'Ik maakte aan / Ik heb aangemaakt', translation: 'to create / to make (e.g. a fire)' },
+                { infinitive: 'afwisselen', tt: 'Ik wissel af', vt_vd: 'Ik wisselde af / Ik heb afgewisseld', translation: 'to alternate / to vary' },
+                { infinitive: 'overkomen', tt: 'Het overkomt me', vt_vd: 'Het overkwam me / Het is me overkomen', translation: 'to happen / to come across' },
+                { infinitive: 'leren', tt: 'Ik leer', vt_vd: 'Ik leerde / Ik heb geleerd', translation: 'to learn' },
+                { infinitive: 'snurken', tt: 'Ik snurk', vt_vd: 'Ik snurkte / Ik heb gesnurkt', translation: 'to snore' },
+                { infinitive: 'geven', tt: 'Ik geef', vt_vd: 'Ik gaf / Ik heb gegeven', translation: 'to give' },
+                { infinitive: 'jeuken', tt: 'Het jeukt', vt_vd: 'Het jeukte / Het heeft gejeukt', translation: 'to itch' },
+                { infinitive: 'afdwalen', tt: 'Ik dwaal af', vt_vd: 'Ik dwaalde af / Ik ben afgedwaald', translation: 'to stray / to wander off' },
+                { infinitive: 'verdwalen', tt: 'Ik verdwaal', vt_vd: 'Ik verdwaalde / Ik ben verdwaald', translation: 'to get lost' },
+                { infinitive: 'verliezen', tt: 'Ik verlies', vt_vd: 'Ik verloor / Ik heb verloren', translation: 'to lose' },
+                { infinitive: 'verblijven', tt: 'Ik verblijf', vt_vd: 'Ik verbleef / Ik heb verbleven', translation: 'to stay / to reside' },
+                { infinitive: 'logeren', tt: 'Ik logeer', vt_vd: 'Ik logeerde / Ik heb gelogeerd', translation: 'to lodge / to stay as a guest' },
+            ],
+        },
+        grammar: [
+            {
+                rule: 'Lidwoorden (Articles) - Regels & Tips',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li>De meeste zelfstandige naamwoorden zijn <strong>de</strong>-woorden.</li>
+                        <li>Verkleinwoorden (eindigend op -je, -tje, -pje, -kje, -etje) zijn <strong>altijd</strong> <strong>het</strong>-woorden.</li>
+                        <li>Meervoudige zelfstandige naamwoorden zijn <strong>altijd</strong> <strong>de</strong>-woorden.</li>
+                        <li>Zelfstandige naamwoorden die eindigen op specifieke achtervoegsels zijn meestal <strong>de</strong>-woorden:
+                            <ul class="list-circle list-inside ml-8">
+                                <li>-ing: de vergadering</li>
+                                <li>-heid: de vrijheid</li>
+                                <li>-nis: de kennis</li>
+                                <li>-schap: de vriendschap</li>
+                                <li>-teit: de universiteit</li>
+                                <li>-tuur: de cultuur</li>
+                                <li>-atie, -tie, -sie, -fie: de organisatie, de conditie, de politie, de filosofie</li>
+                            </ul>
+                        </li>
+                        <li>Zelfstandige naamwoorden die beginnen met "ge-" en niet eindigen op "-e" zijn vaak <strong>het</strong>-woorden:
+                            <ul class="list-circle list-inside ml-8">
+                                <li>het gebouw, het geluid</li>
+                            </ul>
+                        </li>
+                        <li>Zelfstandige naamwoorden die eindigen op specifieke achtervoegsels zijn vaak <strong>het</strong>-woorden:
+                            <ul class="list-circle list-inside ml-8">
+                                <li>-isme: het toerisme</li>
+                                <li>-ment: het arrangement (maar let op: de argument, de element)</li>
+                                <li>-sel: het stelsel</li>
+                                <li>-um: het museum</li>
+                            </ul>
+                        </li>
+                        <li><strong>Advies:</strong> Leer het lidwoord altijd samen met het zelfstandig naamwoord en exposeer jezelf aan veel Nederlands.</li>
+                        <li><strong>Specifiek:</strong> Het station (altijd 'het', nooit 'de').</li>
+                        <li><strong>Specifiek:</strong> HET probleem (niet 'de').</li>
+                        <li><strong>Specifiek:</strong> HET water (niet 'de').</li>
+                        <li><strong>Specifiek:</strong> HET haar (let op: HET lidwoord).</li>
+                        <li><strong>Specifiek:</strong> HET klimaat (let op: HET lidwoord).</li>
+                    </ul>
+                `
+            },
+            {
+                rule: '"Om te" + Infinitief',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li>Gebruik <strong>om te</strong> om een <strong>doel</strong> aan te geven.</li>
+                        <li>De structuur is: <strong>\`om te\` + infinitief (hele werkwoord)</strong>.</li>
+                        <li><strong>Goed:</strong> "Huiswerk helpt <strong>om snel beter te worden</strong>."</li>
+                        <li><strong>Goed:</strong> "Ik probeer <strong>om beter te worden</strong>."</li>
+                        <li><strong>Fout (correctie):</strong> "Helpen met beter worden" → "Helpen <strong>om beter te worden</strong>."</li>
+                    </ul>
+                `
+            },
+            {
+                rule: 'Werkwoordsvolgorde in bijzinnen (Subordinate Clause Word Order)',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li>In een bijzin (beginnend met voegwoorden zoals \`omdat\`, \`dat\`, \`of\`), verplaatst het <strong>werkwoord naar het einde</strong> van de bijzin.</li>
+                        <li><strong>Hoofdzin:</strong> "Ik kan Grieks lezen."</li>
+                        <li><strong>Bijzin:</strong> "Omdat ik Grieks <strong>kan lezen</strong>, ..." (het werkwoord \`kan lezen\` staat aan het eind van de bijzin).</li>
+                        <li><strong>Voorbeeld:</strong> "Omdat ik <strong>moest klussen</strong>, had ik geen tijd."</li>
+                        <li><strong>Specifiek:</strong> "In Libanon <strong>HEBBEN WE</strong>" (correcte volgorde).</li>
+                        <li><strong>Specifiek:</strong> "In Nederland <strong>IS ER</strong>" (correcte volgorde).</li>
+                    </ul>
+                `
+            },
+            {
+                rule: 'Correcte Zinsbouw (General Sentence Structure)',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li><strong>Na \`Misschien\` (inversie):</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li><strong>Goed:</strong> "Misschien <strong>heeft hij</strong> honger." (Werkwoord komt direct na \`misschien\`).</li>
+                                <li><strong>Fout:</strong> "Misschien hij heeft honger."</li>
+                            </ul>
+                        </li>
+                        <li><strong>Plaatsing van \`graag\` (na werkwoord):</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li><strong>Voorbeeld:</strong> "Ik wil <strong>graag</strong> structuur aanbrengen."</li>
+                            </ul>
+                        </li>
+                        <li><strong>Zinsdeel voorop:</strong> "En dan <strong>kunnen we</strong>..." (niet "En dan we kunnen").</li>
+                        <li><strong>\`kijken of\` vs. \`zien of\`</strong>: Gebruik <strong>kijken of</strong> voor een actie, niet <strong>zien of</strong>. Bijv: "We gaan/kunnen <strong>kijken of</strong> we na de wedstrijd..." (niet "zien om").</li>
+                        <li><strong>"En toen..."</strong>: Gebruik voor verhalen in het verleden (niet "en dan").</li>
+                        <li><strong>Voltooid deelwoord na hulpwerkwoord:</strong> "Ik was vergeten..." / "Ik kon niet...".</li>
+                        <li><strong>Werkwoordsvolgorde bij samengestelde werkwoorden:</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li><strong>Goed:</strong> "Heeft je moeder <strong>taart gebakken</strong>?" (Niet "Heeft je moeder gebakken taart?").</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `
+            },
+            {
+                rule: '"Kun je" vs. "Kan je"',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li><strong>Formeel / Correct:</strong> "<strong>Kun je</strong>" (bijvoorbeeld: "Kun je langzamer praten?").</li>
+                        <li><strong>Informeler / Spreektaal:</strong> "<strong>Kan je</strong>" (vaak gebruikt in de spreektaal, maar minder formeel).</li>
+                    </ul>
+                `
+            },
+            {
+                rule: 'Stamwerkwoord zonder -t bij inversie met "je/jij"',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li><strong>Standaardzin (onderwerp vóór werkwoord):</strong> De stam van het werkwoord krijgt een \`-t\`.
+                            <ul class="list-circle list-inside ml-8">
+                                <li>Voorbeeld: "Je <strong>kunt</strong> Nederlands spreken."</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bij inversie (vraag of bijzin, werkwoord vóór onderwerp):</strong> De \`-t\` valt weg wanneer \`je/jij\` direct na het werkwoord staat.
+                            <ul class="list-circle list-inside ml-8">
+                                <li>Voorbeeld: "<strong>Kun</strong> je Nederlands spreken?" (Vraag)</li>
+                                <li>Voorbeeld: "Ik vraag of je <strong>kunt</strong>." (Bijzin - \`kunt\` blijft met \`-t\` omdat \`je\` niet direct erna is).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Regel:</strong> Alleen bij \`je/jij\` in de tegenwoordige tijd valt de \`-t\` weg bij inversie. Bij andere onderwerpen (hij/zij/het) blijft de \`-t\` staan (bijv. "Kan hij...?").</li>
+                    </ul>
+                `
+            },
+            {
+                rule: 'Voorzetsels (Prepositions)',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li>Gebruik <strong>"Na"</strong> voor tijd: "Na de les ga ik naar huis."</li>
+                        <li>Gebruik <strong>"Vanwege" / "Door"</strong> voor reden/oorzaak: "Vanwege het weer bleven we thuis."</li>
+                        <li><strong>Correct:</strong> "Ik heb <strong>naast</strong> mijn man gekucht." (Locatie)</li>
+                        <li><strong>Correct:</strong> "Ik ben <strong>op</strong> het strand."</li>
+                        <li><strong>Correct:</strong> "<strong>IN</strong> de rij" (niet 'op').</li>
+                        <li><strong>Correct:</strong> "<strong>AAN</strong> het wachten" (niet 'in').</li>
+                        <li><strong>Posities:</strong> "Ik zit <strong>OP</strong> mijn stoel."</li>
+                        <li><strong>Plaats:</strong> "Voor een berg" (In front of a mountain).</li>
+                    </ul>
+                `
+            },
+            {
+                rule: 'Tijdsaanduidingen (Time Indications)',
+                explanation: `
+                    <ul class="list-disc list-inside ml-4">
+                        <li><strong>Algemeen:</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li>"Vijf jaar geleden"</li>
+                                <li>"Tijdens" (During)</li>
+                                <li>"2.5 uur"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Specifiek:</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li>"Van toen ik klein was"</li>
+                                <li>"De jaren daarna"</li>
+                                <li>"Het derde jaar"</li>
+                                <li>"De eerste twee jaar" (standaard) vs. "De eerste twee jaren" (met nadruk).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Planning:</strong>
+                            <ul class="list-circle list-inside ml-8">
+                                <li>"Dat duurt waarschijnlijk maanden."</li>
+                                <li>"Tegen het einde van de picknick..."</li>
+                                <li>"Twee tot zeven ’s avonds."</li>
+                                <li>"Zondagochtend blijf ik thuis."</li>
+                                <li>"Anderhalf uur" (One and a half hours).</li>
+                                <li>"Terwijl" (Whilst / meanwhile).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `
+            },
+        ],
+        expressions: [
+            { phrase: 'De stok achter de deur hebben', explanation: 'motivation/pressure to finish something' },
+            { phrase: 'De hort op', explanation: 'Out and about / Away' },
+            { phrase: 'Gewoon gaan!', explanation: 'Just go!' },
+            { phrase: 'Handig woord', explanation: 'Useful word' },
+            { phrase: 'Soms praat ik...', explanation: 'Sometimes I talk...' },
+            { phrase: 'Niet helemaal mijn ding', explanation: 'Not really my thing' },
+            { phrase: 'Het is helemaal mijn ding', explanation: 'It’s totally my thing' },
+            { phrase: 'Let op! / Opletten!', explanation: 'Pay attention!' },
+            { phrase: 'Zo, zal ik het lezen.', explanation: 'Well, I’ll read it then. (informal)' },
+            { phrase: 'In elke grap zit een kern van waarheid.', explanation: 'In every joke there\'s a grain of truth.' },
+            { phrase: 'Uit de hand vallen', explanation: 'to drop from your hand' },
+            { phrase: 'Van de tafel vallen', explanation: 'to fall off the table' },
+            { phrase: 'Om tijd te besparen…', explanation: 'to save time' },
+            { phrase: 'Geen zin in', explanation: 'not in the mood for' },
+            { phrase: 'Wat is er aan de hand?', explanation: 'What\'s going on?' },
+            { phrase: 'We gaan het zien.', explanation: 'We’ll see / We\'ll wait and see.' },
+            { phrase: 'Ik heb zin in...', explanation: 'I feel like...' },
+            { phrase: 'Het naar de zin hebben', explanation: 'to amuse oneself' },
+            { phrase: 'Toch doen!', explanation: 'Still do it!' },
+            { phrase: 'KLOPT', explanation: 'True/Correct' },
+            { phrase: 'Heel erg makkelijk', explanation: 'Very easy' },
+            { phrase: 'Wie weet...', explanation: 'Who knows...' },
+            { phrase: 'Over hebben', explanation: 'left (e.g., "Er is nog 1 bikini over.")' },
+            { phrase: 'Net niks', explanation: 'Just about nothing / vrijwel niets' },
+            { phrase: 'Dat is balen = O, vervelend zeg! = O, niet fijn…', explanation: 'Too bad / Oh, that\'s annoying / Oh, not nice...' },
+            { phrase: 'Iets er weer op hebben zitten', explanation: 'It’s done / it’s over, now, it’s behind you.' },
+            { phrase: 'HUIs versus HOUSE', explanation: 'Dutch \'Huis\' versus English \'House\'' },
+        ],
+        questions: [
+            { question: 'Hoe laat is het?', answer: 'What time is it?' },
+            { question: 'Ik heb geen idee hoe laat het is.', answer: 'I have no idea what time it is.' },
+            { question: 'Mag ik een vraag stellen?', answer: 'May I ask a question?' },
+            { question: 'Ik kan je niet volgen.', answer: 'I can\'t follow you. (I don\'t understand you)' },
+            { question: 'Kunt u langzamer praten?', answer: 'Can you speak slower? (formal)' },
+            { question: 'Kun je langzamer praten?', answer: 'Can you speak slower? (informal)' },
+            { question: 'Ga je het vieren?', answer: 'Are you going to celebrate it? (e.g., a birthday)' },
+            { question: 'Mag ik u een vraagje stellen?', answer: 'May I ask you a quick question? (formal)' },
+            { question: 'Weet u welke halte Spuistraat is?', answer: 'Do you know which stop Spuistraat is?' },
+            { question: 'Mevrouw, zou ik u mijn plaats kunnen geven?', answer: 'Madam, could I give you my seat?' },
+            { question: 'Zou u op mijn plaats willen zitten?', answer: 'Would you like to sit in my seat?' },
+            { question: 'En op welk spoor komt de trein aan?', answer: 'And on which track does the train arrive?' },
+            { question: 'Wat is er gebeurd?', answer: 'What happened?' },
+            { question: 'Gaat de trein van een ander spoor opeens?', answer: 'Is the train suddenly leaving from a different track?' },
+            { question: 'Kunt u me uitleggen wat er gebeurd is?', answer: 'Can you explain to me what happened?' },
+            { question: 'Moet ik nog iets over deze medicijnen weten?', answer: 'Do I need to know anything else about these medicines?' },
+            { question: 'Was het indrukwekkend?', answer: 'Was it impressive?' },
+            { question: 'Hadden wij onweer? Ja, maar niet sterk.', answer: 'Did we have a thunderstorm? Yes, but not strong.' },
+            { question: 'Ben je zenuwachtig voor het examen?', answer: 'Are you nervous for the exam?' },
+            { question: 'Heb je praktijkexamen of theorie?', answer: 'Do you have a practical exam or theory?' },
+            { question: 'Denk je dat je zult slagen of zakken?', answer: 'Do you think you will pass or fail?' },
+            { question: 'Sorry, ik kan je niet volgen.', answer: 'Sorry, I can\'t follow you.' },
+            { question: 'Kan ik snel voorgaan? Ik heb maar 2 producten.', answer: 'Can I go ahead quickly? I only have 2 products.' },
+            { question: 'Sorry, meneer.', answer: 'Sorry, sir.' },
+            { question: 'Hoezo sta je opeens hier en niet daar?', answer: 'Why are you suddenly standing here and not there?' },
+            { question: 'Mag ik er even langs?', answer: 'May I pass?' },
+            { question: 'Mag ik er even tussendoor?', answer: 'May I cut through?' },
+            { question: 'Spreek ik Fries?', answer: 'Do I speak Frisian?' },
+            { question: 'En als het miezert?', answer: 'And if it drizzles?' },
+            { question: 'Kunt u mijn 5 euro wisselen zodat ik 50 cent heb?', answer: 'Can you change my 5 euros so I have 50 cents?' },
+            { question: 'Kunt u mij de ketchup aangeven?', answer: 'Can you hand me the ketchup?' },
+        ]
+    };
+
+    // Prepare flashcard data from vocabulary and grammar
+    useEffect(() => {
+        const vocabCards = [
+            ...studyData.vocabulary.deWords.map(item => ({ front: item.word, back: item.translation, type: 'vocab' })),
+            ...studyData.vocabulary.hetWords.map(item => ({ front: item.word, back: item.translation, type: 'vocab' })),
+            ...studyData.vocabulary.adjectivesAdverbs.map(item => ({ front: item.word, back: item.translation, type: 'vocab' })),
+            ...studyData.vocabulary.verbs.map(item => ({ front: item.infinitive, back: `${item.translation} (TT: ${item.tt}, VT/VD: ${item.vt_vd})`, type: 'verb' }))
+        ];
+
+        const grammarCards = studyData.grammar.map(item => ({
+            front: item.rule,
+            back: item.explanation.replace(/<\/?ul[^>]*>|<\/?li[^>]*>|<\/?strong[^>]*>/g, '').replace(/<\/?br\/?>/g, '\n').replace(/&nbsp;/g, ' '), // Basic HTML stripping
+            type: 'grammar'
+        }));
+
+        setFlashcardData([...vocabCards, ...grammarCards]);
+    }, []);
+
+    // Prepare quiz data
+    useEffect(() => {
+        const vocabQuizQuestions = [];
+        // Add de-words to quiz
+        studyData.vocabulary.deWords.forEach(item => {
+            const incorrectOptions = studyData.vocabulary.deWords
+                .filter(w => w.word !== item.word)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(w => w.translation);
+            vocabQuizQuestions.push({
+                question: `What is the English translation of "${item.word}"?`,
+                options: shuffleArray([item.translation, ...incorrectOptions]),
+                answer: item.translation
+            });
+        });
+        // Add het-words to quiz
+        studyData.vocabulary.hetWords.forEach(item => {
+            const incorrectOptions = studyData.vocabulary.hetWords
+                .filter(w => w.word !== item.word)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(w => w.translation);
+            vocabQuizQuestions.push({
+                question: `What is the English translation of "${item.word}"?`,
+                options: shuffleArray([item.translation, ...incorrectOptions]),
+                answer: item.translation
+            });
+        });
+        // Add adjectives/adverbs to quiz
+        studyData.vocabulary.adjectivesAdverbs.forEach(item => {
+            const incorrectOptions = studyData.vocabulary.adjectivesAdverbs
+                .filter(w => w.word !== item.word)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(w => w.translation);
+            vocabQuizQuestions.push({
+                question: `What is the English translation of "${item.word}"?`,
+                options: shuffleArray([item.translation, ...incorrectOptions]),
+                answer: item.translation
+            });
+        });
+
+        // Add some grammar questions (simplified for quiz)
+        const grammarQuizQuestions = [
+            {
+                question: 'In a Dutch subordinate clause, where does the verb typically go?',
+                options: shuffleArray(['At the beginning', 'In the middle', 'At the end', 'After the subject']),
+                answer: 'At the end'
+            },
+            {
+                question: 'Which article is always used for diminutives (words ending in -je, -tje, etc.)?',
+                options: shuffleArray(['de', 'het', 'een', 'geen']),
+                answer: 'het'
+            },
+            {
+                question: 'What is the correct way to say "Maybe he is hungry" (using "misschien")?',
+                options: shuffleArray(['Misschien hij heeft honger.', 'Misschien heeft hij honger.', 'Hij heeft misschien honger.', 'Heeft misschien hij honger.']),
+                answer: 'Misschien heeft hij honger.'
+            },
+            {
+                question: 'When using "om te" + infinitive, what does it typically indicate?',
+                options: shuffleArray(['A condition', 'A time', 'A purpose', 'A place']),
+                answer: 'A purpose'
+            },
+            {
+                question: 'Which is the more formal/correct way to ask "Can you speak slower?"',
+                options: shuffleArray(['Kan je langzamer praten?', 'Kun je langzamer praten?']),
+                answer: 'Kun je langzamer praten?'
+            },
+            {
+                question: 'In "Ik zit OP mijn stoel", what does "OP" indicate?',
+                options: shuffleArray(['Under', 'Next to', 'On', 'Behind']),
+                answer: 'On'
+            },
+            {
+                question: 'What is the correct article for "probleem"? (het/de)',
+                options: shuffleArray(['de', 'het']),
+                answer: 'het'
+            }
+        ];
+
+        setQuizData(shuffleArray([...vocabQuizQuestions, ...grammarQuizQuestions]));
+    }, []);
+
+    // Helper to shuffle arrays
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    // Navigation Buttons
+    const NavBar = () => (
+        <nav className="bg-blue-700 p-4 rounded-b-lg shadow-md mb-8">
+            <ul className="flex flex-wrap justify-center gap-4">
+                <li>
+                    <button
+                        onClick={() => setCurrentView('home')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                            currentView === 'home' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-blue-100 hover:bg-blue-800'
+                        }`}
+                    >
+                        Home
+                    </button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => setCurrentView('vocabulary')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                            currentView === 'vocabulary' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-blue-100 hover:bg-blue-800'
+                        }`}
+                    >
+                        Vocabulary
+                    </button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => setCurrentView('grammar')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                            currentView === 'grammar' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-blue-100 hover:bg-blue-800'
+                        }`}
+                    >
+                        Grammar
+                    </button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => setCurrentView('flashcards')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                            currentView === 'flashcards' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-blue-100 hover:bg-blue-800'
+                        }`}
+                    >
+                        Flashcards
+                    </button>
+                </li>
+                <li>
+                    <button
+                        onClick={() => setCurrentView('quiz')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                            currentView === 'quiz' ? 'bg-blue-900 text-white' : 'bg-blue-600 text-blue-100 hover:bg-blue-800'
+                        }`}
+                    >
+                        Quiz
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    );
+
+    // Home View
+    const HomeView = () => (
+        <div className="p-8 bg-white rounded-lg shadow-md text-center">
+            <h2 className="text-3xl font-bold text-blue-700 mb-4">Welcome to your Dutch Study App!</h2>
+            <p className="text-gray-700 mb-6">
+                Use the navigation above to explore your vocabulary, review grammar rules, practice with flashcards, or test your knowledge with a quiz.
+            </p>
+            <div className="flex flex-col md:flex-row justify-center gap-4">
+                <button
+                    onClick={() => setCurrentView('flashcards')}
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-green-600 transition-colors duration-300 transform hover:scale-105"
+                >
+                    Start Flashcards
+                </button>
+                <button
+                    onClick={() => setCurrentView('quiz')}
+                    className="bg-purple-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105"
+                >
+                    Start Quiz
+                </button>
+            </div>
+        </div>
+    );
+
+    // Vocabulary View
+    const VocabularyView = () => (
+        <div className="p-8 bg-white rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-blue-700 mb-6 border-b pb-2">1. Woordenschat (Vocabulary)</h2>
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">1.1 De-woorden (Common Nouns)</h3>
+            <ul className="list-disc list-inside ml-4 mb-6 text-gray-700 grid grid-cols-1 md:grid-cols-2 gap-2">
+                {studyData.vocabulary.deWords.map((item, index) => (
+                    <li key={index}>
+                        <strong className="text-blue-600">{item.word}</strong>: {item.translation}
+                    </li>
+                ))}
+            </ul>
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">1.2 Het-woorden (Neuter Nouns)</h3>
+            <ul className="list-disc list-inside ml-4 mb-6 text-gray-700 grid grid-cols-1 md:grid-cols-2 gap-2">
+                {studyData.vocabulary.hetWords.map((item, index) => (
+                    <li key={index}>
+                        <strong className="text-blue-600">{item.word}</strong>: {item.translation}
+                    </li>
+                ))}
+            </ul>
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">1.3 Bijvoeglijke naamwoorden & Bijwoorden (Adjectives & Adverbs)</h3>
+            <ul className="list-disc list-inside ml-4 mb-6 text-gray-700 grid grid-cols-1 md:grid-cols-2 gap-2">
+                {studyData.vocabulary.adjectivesAdverbs.map((item, index) => (
+                    <li key={index}>
+                        <strong>{item.word}</strong>: {item.translation}
+                    </li>
+                ))}
+            </ul>
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">1.4 Werkwoorden (Verbs)</h3>
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white rounded-lg shadow-sm">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Infinitief</th>
+                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Tegenwoordige Tijd (TT)</th>
+                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Verleden Tijd (VT) / Voltooid Deelwoord (VD)</th>
+                            <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-600">Vertaling (basis)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {studyData.vocabulary.verbs.map((item, index) => (
+                            <tr key={index} className="hover:bg-gray-50">
+                                <td className="py-2 px-4 border-b border-gray-200">{item.infinitive}</td>
+                                <td className="py-2 px-4 border-b border-gray-200">{item.tt}</td>
+                                <td className="py-2 px-4 border-b border-gray-200">{item.vt_vd}</td>
+                                <td className="py-2 px-4 border-b border-gray-200">{item.translation}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+
+    // Grammar View
+    const GrammarView = () => (
+        <div className="p-8 bg-white rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-blue-700 mb-6 border-b pb-2">2. Grammatica (Grammar)</h2>
+            {studyData.grammar.map((rule, index) => (
+                <div key={index} className="mb-6 pb-4 border-b border-gray-100 last:border-b-0">
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">{rule.rule}</h3>
+                    <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: rule.explanation }} />
+                </div>
+            ))}
+        </div>
+    );
+
+    // Flashcard Component
+    const Flashcard = ({ cards }) => {
+        const [currentCardIndex, setCurrentCardIndex] = useState(0);
+        const [isFlipped, setIsFlipped] = useState(false);
+        const [shuffledCards, setShuffledCards] = useState([]);
+
+        useEffect(() => {
+            setShuffledCards(shuffleArray([...cards]));
+            setCurrentCardIndex(0);
+            setIsFlipped(false);
+        }, [cards]);
+
+        const handleFlip = () => setIsFlipped(!isFlipped);
+
+        const handleNext = () => {
+            setIsFlipped(false);
+            setCurrentCardIndex((prevIndex) => (prevIndex + 1) % shuffledCards.length);
+        };
+
+        const handlePrev = () => {
+            setIsFlipped(false);
+            setCurrentCardIndex((prevIndex) => (prevIndex - 1 + shuffledCards.length) % shuffledCards.length);
+        };
+
+        if (shuffledCards.length === 0) {
+            return <div className="p-8 bg-white rounded-lg shadow-md text-center text-gray-600">No flashcards available.</div>;
+        }
+
+        const currentCard = shuffledCards[currentCardIndex];
+
+        return (
+            <div className="p-8 bg-white rounded-lg shadow-md flex flex-col items-center">
+                <h2 className="text-2xl font-bold text-blue-700 mb-6">Flashcards</h2>
+                <div
+                    className={`relative w-full max-w-md h-64 bg-blue-100 rounded-lg shadow-xl cursor-pointer perspective-1000 transform transition-transform duration-500 ${isFlipped ? 'rotate-y-180' : ''}`}
+                    onClick={handleFlip}
+                >
+                    <div className="absolute w-full h-full backface-hidden flex items-center justify-center p-4 text-center text-blue-800 text-2xl font-semibold">
+                        {currentCard.front}
+                    </div>
+                    <div className="absolute w-full h-full backface-hidden flex items-center justify-center p-4 text-center text-blue-900 text-xl font-medium rotate-y-180">
+                        {currentCard.back}
+                    </div>
+                </div>
+                <div className="mt-6 flex gap-4">
+                    <button
+                        onClick={handlePrev}
+                        className="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-200"
+                    >
+                        Previous
+                    </button>
+                    <button
+                        onClick={handleNext}
+                        className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200"
+                    >
+                        Next
+                    </button>
+                </div>
+                <p className="mt-4 text-gray-600">Card {currentCardIndex + 1} of {shuffledCards.length}</p>
+            </div>
+        );
+    };
+
+    // Quiz Component
+    const Quiz = ({ questions }) => {
+        const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+        const [selectedAnswer, setSelectedAnswer] = useState(null);
+        const [score, setScore] = useState(0);
+        const [showResult, setShowResult] = useState(false);
+        const [feedback, setFeedback] = useState('');
+        const [quizStarted, setQuizStarted] = useState(false);
+
+        const currentQuestion = questions[currentQuestionIndex];
+
+        const handleAnswerSelect = (option) => {
+            if (selectedAnswer === null) { // Only allow selection if not already answered
+                setSelectedAnswer(option);
+                if (option === currentQuestion.answer) {
+                    setScore(score + 1);
+                    setFeedback('Correct!');
+                } else {
+                    setFeedback(`Incorrect. The correct answer was: ${currentQuestion.answer}`);
+                }
+            }
+        };
+
+        const handleNextQuestion = () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                setCurrentQuestionIndex(currentQuestionIndex + 1);
+                setSelectedAnswer(null);
+                setFeedback('');
+            } else {
+                setShowResult(true);
+            }
+        };
+
+        const handleRestartQuiz = () => {
+            setCurrentQuestionIndex(0);
+            setSelectedAnswer(null);
+            setScore(0);
+            setShowResult(false);
+            setFeedback('');
+            setQuizStarted(false);
+            // Re-shuffle questions for a new round
+            setQuizData(shuffleArray([...questions]));
+        };
+
+        if (!quizStarted) {
+            return (
+                <div className="p-8 bg-white rounded-lg shadow-md text-center">
+                    <h2 className="text-2xl font-bold text-purple-700 mb-4">Ready for the Quiz?</h2>
+                    <p className="text-gray-700 mb-6">Test your knowledge on vocabulary and grammar.</p>
+                    <button
+                        onClick={() => setQuizStarted(true)}
+                        className="bg-purple-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105"
+                    >
+                        Start Quiz
+                    </button>
+                </div>
+            );
+        }
+
+        if (showResult) {
+            return (
+                <div className="p-8 bg-white rounded-lg shadow-md text-center">
+                    <h2 className="text-3xl font-bold text-purple-700 mb-4">Quiz Complete!</h2>
+                    <p className="text-xl text-gray-700 mb-6">Your score: {score} out of {questions.length}</p>
+                    <button
+                        onClick={handleRestartQuiz}
+                        className="bg-purple-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105"
+                    >
+                        Restart Quiz
+                    </button>
+                </div>
+            );
+        }
+
+        if (questions.length === 0) {
+            return <div className="p-8 bg-white rounded-lg shadow-md text-center text-gray-600">No quiz questions available.</div>;
+        }
+
+        return (
+            <div className="p-8 bg-white rounded-lg shadow-md flex flex-col items-center">
+                <h2 className="text-2xl font-bold text-purple-700 mb-6">Quiz</h2>
+                <div className="w-full max-w-lg">
+                    <p className="text-lg font-semibold text-gray-800 mb-4">
+                        Question {currentQuestionIndex + 1} of {questions.length}:
+                    </p>
+                    <p className="text-xl text-blue-800 mb-6">{currentQuestion.question}</p>
+                    <div className="grid grid-cols-1 gap-4 mb-6">
+                        {currentQuestion.options.map((option, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleAnswerSelect(option)}
+                                className={`w-full py-3 px-4 rounded-lg text-lg text-left transition-colors duration-200
+                                    ${selectedAnswer === null
+                                        ? 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                                        : option === currentQuestion.answer
+                                            ? 'bg-green-200 text-green-800 border-2 border-green-500'
+                                            : option === selectedAnswer
+                                                ? 'bg-red-200 text-red-800 border-2 border-red-500'
+                                                : 'bg-gray-100 text-gray-600 opacity-70 cursor-not-allowed'
+                                    } shadow-sm`}
+                                disabled={selectedAnswer !== null}
+                            >
+                                {option}
+                            </button>
+                        ))}
+                    </div>
+                    {feedback && (
+                        <p className={`text-center text-lg font-semibold mb-4 ${feedback.includes('Correct') ? 'text-green-600' : 'text-red-600'}`}>
+                            {feedback}
+                        </p>
+                    )}
+                    <button
+                        onClick={handleNextQuestion}
+                        className={`w-full bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-colors duration-300 transform hover:scale-105
+                            ${selectedAnswer === null ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={selectedAnswer === null}
+                    >
+                        {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Show Result'}
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 text-gray-800 font-inter">
+            <header className="bg-white shadow-sm py-6">
+                <div className="max-w-4xl mx-auto px-4 text-center">
+                    <h1 className="text-3xl md:text-4xl font-bold text-blue-800">Interactive Dutch Study App</h1>
+                    <p className="text-gray-600 mt-2">Your personalized tool for mastering Dutch notes</p>
+                </div>
+            </header>
+
+            <div className="max-w-4xl mx-auto px-4 my-8">
+                <NavBar />
+
+                {currentView === 'home' && <HomeView />}
+                {currentView === 'vocabulary' && <VocabularyView />}
+                {currentView === 'grammar' && <GrammarView />}
+                {currentView === 'flashcards' && <Flashcard cards={flashcardData} />}
+                {currentView === 'quiz' && <Quiz questions={quizData} />}
+            </div>
+        </div>
+    );
+};
+
+export default App;
